@@ -102,9 +102,8 @@ int GR6_determiner_si_jeu_fini(Map* map)		//fonction pour savoir si le jeu est f
 			}
 		}
 	}
-
 	//prise de décision sur l'état de la partie
-	if((GR6_compteurJ1+GR6_compteurJ2) == ((map->size)^2))	//si tout le territoire est rempli
+	if((GR6_compteurJ1+GR6_compteurJ2) == ((map->size)*(map->size)))	//si tout le territoire est rempli
 	{
 		return 0;	//fin de la partie et égalité
 	}
@@ -146,6 +145,7 @@ int main(int argc, char** argv)
 		}
 
 		system("clear");	//effacer le contenu du terminal
+		printf("Jeu les 7 merveilles du monde des 7 couleurs \n\n");
 		//Affichage de l'état actuel de la partie
 		GR6_affchage_etat_actuel_partie(&map);
 

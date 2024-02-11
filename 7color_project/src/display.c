@@ -4,8 +4,15 @@
 // Implémentation de la fonction d'affichage
 void GR6_affchage_etat_actuel_partie(Map* map)
 {
+    printf("\033[47m  ");
     for(int y=0; y<(map->size);y++)
 	{
+        printf("   ");
+    }
+    printf("  \n");
+    for(int y=0; y<(map->size);y++)
+	{
+        printf("\033[47m  ");
 		for(int x=0; x<(map->size);x++)
 		{
             
@@ -28,30 +35,37 @@ void GR6_affchage_etat_actuel_partie(Map* map)
                 break;
 
             case 3:
+                printf("\033[0m");
                 printf(" \033[31mR ");
                 break;
 
             case 4:
+                printf("\033[0m");
                 printf(" \033[32mG ");
                 break;
             
             case 5:
+                printf("\033[0m");
                 printf(" \033[34mB ");
                 break;
 
             case 6:
+                printf("\033[0m");
                 printf(" \033[33mY ");
                 break;
 
             case 7:
+                printf("\033[0m");
                 printf(" \033[35mM ");
                 break;
             
             case 8:
+                printf("\033[0m");
                 printf(" \033[36mC ");
                 break;
 
             case 9:
+                printf("\033[0m");
                 printf(" \033[37mW ");
                 break;
             
@@ -59,8 +73,14 @@ void GR6_affchage_etat_actuel_partie(Map* map)
                 break;
             }
         }
-        printf("\n");
+        printf("\033[47m  \n");
 	}
+    printf("\033[47m  ");
+    for(int y=0; y<(map->size);y++)
+	{
+        printf("   ");
+    }
+    printf("  \n");
     // Réinitialiser la couleur
     printf("\033[0m");
 }
