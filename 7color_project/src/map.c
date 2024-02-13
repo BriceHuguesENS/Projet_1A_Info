@@ -113,7 +113,6 @@ int GR6_determiner_si_jeu_fini(Map* map)		//fonction pour savoir si le jeu est f
 int main(int argc, char** argv)
 {
 	system("clear");	//effacer le contenu du terminal
-	
 	// Convertit l'argument de la ligne de commande en entier pour récupérer la taille de la carte choisie
     int taille_carte = atoi(argv[1]);
 
