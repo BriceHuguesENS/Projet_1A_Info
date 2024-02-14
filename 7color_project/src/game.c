@@ -1,21 +1,71 @@
 #include "../head/game.h"
 #include <stdio.h>
+#include <stdlib.h>
+#include <time.h>
+#include "../head/display.h"
 
+int GR6_numCouleurChoisie = 0;	//variable pour enregistrer le choix de couleur du joueur
+int GR6_numeroJoueur = 1;	//c'est le joueur 1 ('v') qui commence la partie
 
-void GR6_initialiser_jeu()     //fonction pour initialiser la carte et d'autres paramètres au début du jeu
+void GR6_initialiser_jeu(Map* map,int taille_carte)     //fonction pour initialiser la carte et d'autres paramètres au début du jeu
 {
     system("clear");	//effacer le contenu du terminal
-	// Convertit l'argument de la ligne de commande en entier pour récupérer la taille de la carte choisie
-    int taille_carte = atoi(argv[1]);
-
-	int GR6_numCouleurChoisie = 0;	//variable pour enregistrer le choix de couleur du joueur
-	int GR6_numeroJoueur = 1;	//c'est le joueur 1 ('v') qui commence la partie
 	srand( time( NULL ) );		//initialiser la fonction rand sur le timer
-
-	create_empty_map (&map, taille_carte);	//création de la carte
-	fill_map(&map);		//remplie les cases de la carte
+	create_empty_map (map, taille_carte);	//création de la carte
+	fill_map(map);		//remplie les cases de la carte
 }
 
+void GR6_lancer_jeu(Map* map)     //fonction pour lancer le jeu et gérer la partie
+{
+	printf("Début de la partie \n\n");
+	//Affichage de l'état actuel de la partie
+	GR6_affchage_etat_actuel_partie(map);
+	
+	while(GR6_determiner_si_jeu_fini(map) == -1)		//tant que le jeu doit continuer
+	{
+		//Choix d'une couleur pour le joueur en qustion
+		printf("\n\033[0mJoueur %i:\n\033[31m3:RED\n\033[32m4:GREEN\n\033[34m5:BLUE\n\033[33m6:YELLOW\n\033[35m7:MAGENTA\n\033[36m8:CYAN\n\033[37m9:WHITE\n\033[0m",GR6_numeroJoueur);
+		scanf("%i", &GR6_numCouleurChoisie);	//récupérer le choix du joueur
+		
+		//mise à jour de la map
+		while(GR6_maj_monde(map, GR6_numCouleurChoisie,GR6_numeroJoueur)== 1)
+		{
+			//on repasse dans la boucle while pour refaire la maj, et on en sort
+			//printf("Maj de la map en cours...");
+		}
+
+		system("clear");	//effacer le contenu du terminal
+		printf("Jeu les 7 merveilles du monde des 7 couleurs \n\n");
+		//Affichage de l'état actuel de la partie
+		GR6_affchage_etat_actuel_partie(map);
+
+		//Changement de joueur
+		GR6_numeroJoueur = 3 - GR6_numeroJoueur;	//passe ce numéro à 2 ou 1 en fonction de l'état au tour précédent
+	}	
+}
+
+void GR6_cloturer_jeu(Map* map)     //fonction pour cloturer le jeu
+{
+	//sélection de l'issue finale
+	switch (GR6_determiner_si_jeu_fini(map))
+	{
+	case 1:
+		printf("Fin de la partie !\nLe vainqueur est le joueur 1 \n");	
+		break;
+
+	case 2:
+		printf("Fin de la partie !\nLe vainqueur est le joueur 2 \n");	
+		break;
+	
+	case 0:
+		printf("Fin de la partie !\nIl y a égalité \n");	
+		break;
+	}
+	
+	//libération de l'espace mémoire
+	free(map->map);
+	map->map = NULL;
+}
 
 
 int GR6_maj_monde(Map* map,int GR6_choixJoueur, int GR6_numeroJoueur)
