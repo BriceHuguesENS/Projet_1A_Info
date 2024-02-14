@@ -17,7 +17,8 @@ void GR6_initialiser_jeu(Map* map,int taille_carte)     //fonction pour initiali
 
 void GR6_lancer_jeu(Map* map)     //fonction pour lancer le jeu et gérer la partie
 {
-	printf("Début de la partie \n\n");
+	printf("Jeu les 7 merveilles du monde des 7 couleurs \n");
+	printf("Début de la partie \n");
 	//Affichage de l'état actuel de la partie
 	GR6_affchage_etat_actuel_partie(map);
 	
@@ -74,15 +75,15 @@ int GR6_maj_monde(Map* map,int GR6_choixJoueur, int GR6_numeroJoueur)
 	{
 		for(int x=0; x<map->size;x++)
 		{	
-			int GR6_couleurCase = get_map_value (map, x, y);
+			int GR6_couleurCase = GR6_get_map_value(map, x, y);
 			
 			if(GR6_couleurCase == GR6_choixJoueur)		//si la case actuelle est celle jouée par le joueur en question
 			{
 				//vérification si elle est bien adjacente au territoire
-				if(get_map_value (map, x+1, y)== GR6_numeroJoueur || 
-				   get_map_value (map, x, y+1) == GR6_numeroJoueur ||
-				   get_map_value (map, x-1, y) == GR6_numeroJoueur ||
-				   get_map_value (map, x, y-1) == GR6_numeroJoueur)
+				if(GR6_get_map_value(map, x+1, y)== GR6_numeroJoueur || 
+				   GR6_get_map_value(map, x, y+1) == GR6_numeroJoueur ||
+				   GR6_get_map_value(map, x-1, y) == GR6_numeroJoueur ||
+				   GR6_get_map_value(map, x, y-1) == GR6_numeroJoueur)
 				{
 					set_map_value (map, x, y, GR6_numeroJoueur);	//le joueur en prend possession
 					printf("Maj faite\n");
@@ -105,7 +106,7 @@ int GR6_determiner_si_jeu_fini(Map* map)		//fonction pour savoir si le jeu est f
 	{
 		for(int x=0; x<map->size;x++)
 		{
-			if(get_map_value (map, x, y)== 1)
+			if(GR6_get_map_value(map, x, y)== 1)
 			{
 				GR6_compteurJ1++;
 				if(GR6_compteurJ1 > ((map->size*map->size)/2))	//si joueur occupe plus de 50%
@@ -113,7 +114,7 @@ int GR6_determiner_si_jeu_fini(Map* map)		//fonction pour savoir si le jeu est f
 					return 1;	//fin de la partie
 				}
 			}
-			if(get_map_value (map, x, y)== 2)
+			if(GR6_get_map_value(map, x, y)== 2)
 			{
 				GR6_compteurJ2++;
 				if(GR6_compteurJ2 > ((map->size*map->size)/2))	//si joueur occupe plus de 50%
@@ -129,4 +130,15 @@ int GR6_determiner_si_jeu_fini(Map* map)		//fonction pour savoir si le jeu est f
 		return 0;	//fin de la partie et égalité
 	}
 	return -1;		//la partie continue sinon
+}
+
+Color GR6_get_map_value(Map* map, int x, int y)     //pour récupérer la valeur d'une cse du jeu, et -1 si on sort de la map (fait appel à get_map_value de map.c)
+{
+	if (map -> map == NULL || x >= map -> size || y >= map -> size || y < 0 || x < 0)
+	{
+		//printf("[ERROR] map not big enough or not initialized %p %i access (%i %i)", map -> map, map -> size, x, y);
+		return ERROR;
+	}
+	//sinon
+	return get_map_value(map, x, y);
 }

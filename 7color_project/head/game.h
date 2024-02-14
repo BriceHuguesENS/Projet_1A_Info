@@ -11,4 +11,6 @@ void GR6_initialiser_jeu(Map* map,int taille_carte);     //fonction pour initial
 void GR6_lancer_jeu(Map* map);     //fonction pour lancer le jeu et gérer la partie
 
 void GR6_cloturer_jeu(Map* map);     //fonction pour cloturer le jeu
+
+Color GR6_get_map_value(Map* map, int x, int y);     //pour récupérer la valeur d'une cse du jeu, et -1 si on sort de la map (fait appel à get_map_value de map.c)
 #endif

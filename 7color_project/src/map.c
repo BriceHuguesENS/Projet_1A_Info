@@ -4,11 +4,9 @@
 #include "../head/display.h"
 #include "../head/game.h"
 
-
 Map map = {.map = NULL, .size = 0};
 
 int GR6_numCouleur=0;		//la couleur associée à un numéro
-
 
 void create_empty_map (Map* map, int size)
 {	
