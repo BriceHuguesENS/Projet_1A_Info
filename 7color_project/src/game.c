@@ -87,7 +87,6 @@ int GR6_maj_monde(Map* map,int GR6_choixJoueur, int GR6_numeroJoueur)
 				   GR6_get_map_value(map, x, y-1) == GR6_numeroJoueur)
 				{
 					set_map_value (map, x, y, GR6_numeroJoueur);	//le joueur en prend possession
-					printf("Maj faite\n");
 					return 1;	//signifie qu'il faut refaire une maj de la map pour vérification
 				}
 			}
