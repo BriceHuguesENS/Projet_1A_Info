@@ -25,7 +25,8 @@ void GR6_lancer_jeu(Map* map)     //fonction pour lancer le jeu et gérer la par
 	while(GR6_determiner_si_jeu_fini(map) == -1)		//tant que le jeu doit continuer
 	{
 		//Choix d'une couleur pour le joueur en qustion
-		printf("\n\033[0mJoueur %i:\n\033[31m3:RED\n\033[32m4:GREEN\n\033[34m5:BLUE\n\033[33m6:YELLOW\n\033[35m7:MAGENTA\n\033[36m8:CYAN\n\033[37m9:WHITE\n\033[0m",GR6_numeroJoueur);
+		printf("\n\033[31m3:RED\n\033[32m4:GREEN\n\033[34m5:BLUE\n\033[33m6:YELLOW\n\033[35m7:MAGENTA\n\033[36m8:CYAN\n\033[37m9:WHITE\n\033[0m");
+		printf("\n\033[0mJoueur %i, entrez votre couleur: ",GR6_numeroJoueur);
 		scanf("%i", &GR6_numCouleurChoisie);	//récupérer le choix du joueur
 		
 		//mise à jour de la map
