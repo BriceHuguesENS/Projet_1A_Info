@@ -3,32 +3,73 @@
 #include <stdlib.h>
 #include <time.h>
 #include "../head/display.h"
+#include "../head/ia.h"
 
 int GR6_numCouleurChoisie = 0;	//variable pour enregistrer le choix de couleur du joueur
 int GR6_numeroJoueur = 1;	//c'est le joueur 1 ('v') qui commence la partie
 
-void GR6_initialiser_jeu(Map* map,int taille_carte)     //fonction pour initialiser la carte et d'autres paramètres au début du jeu
+void GR6_initialiser_jeu(Map* map,int GR6_taille_carte)     //fonction pour initialiser la carte et d'autres paramètres au début du jeu
 {
     system("clear");	//effacer le contenu du terminal
 	srand( time( NULL ) );		//initialiser la fonction rand sur le timer
-	create_empty_map (map, taille_carte);	//création de la carte
+	create_empty_map (map, GR6_taille_carte);	//création de la carte
 	fill_map(map);		//remplie les cases de la carte
 }
 
-void GR6_lancer_jeu(Map* map)     //fonction pour lancer le jeu et gérer la partie
+int GR6_humain(Map* map, int GR6_numeroJoueur)
 {
-	printf("Jeu les 7 merveilles du monde des 7 couleurs \n");
-	printf("Début de la partie \n");
+	//Affichage des choix de couleur disponible avec le chiffre correspondant
+	printf("\n\033[31m3:🟥\n\033[32m4:🟩\n\033[34m5:🟦\n\033[33m6:🟨\n\033[35m7:🟪\n\033[36m8:🟫\n\033[37m9:⬜️\n\033[0m");
+	//sélection de la couleur par le joueur ou l'ia
+	printf("\n\033[0mJoueur %i, entrez votre couleur: ",GR6_numeroJoueur);
+	scanf("%i", &GR6_numCouleurChoisie);	//récupérer le choix du joueur
+	return GR6_numCouleurChoisie;
+}
+
+void GR6_lancer_jeu(Map* map)     //fonction pour lancer le jeu et gérer la partie en fonction du mode de jeu choisi
+{
+	printf("Jeu les 7 merveilles du monde des 7 couleurs \n\n");
 	//Affichage de l'état actuel de la partie
 	GR6_affchage_etat_actuel_partie(map);
+	//Choix du mode de jeu
+	int GR6_choix_mode_jeu = -1;
+	printf("Veuillez sélectionner un mode de jeu: \n\n1:humain vs humain\n2:humain vs ia aléatoire\n3:humain vs ia glouton\n4:humain vs ia améliorée\n");
+	scanf("%i",&GR6_choix_mode_jeu);
+	system("clear");	//effacer le contenu du terminal
+
+	int GR6_old_choix_mode_jeu = 0;
+	int* GR6_pointeur_old = &GR6_old_choix_mode_jeu;
+	*GR6_pointeur_old = GR6_choix_mode_jeu;
+	printf("Début de la partie \n");
+	
 	
 	while(GR6_determiner_si_jeu_fini(map) == -1)		//tant que le jeu doit continuer
 	{
-		//Choix d'une couleur pour le joueur en qustion
-		printf("\n\033[31m3:RED\n\033[32m4:GREEN\n\033[34m5:BLUE\n\033[33m6:YELLOW\n\033[35m7:MAGENTA\n\033[36m8:CYAN\n\033[37m9:WHITE\n\033[0m");
-		printf("\n\033[0mJoueur %i, entrez votre couleur: ",GR6_numeroJoueur);
-		scanf("%i", &GR6_numCouleurChoisie);	//récupérer le choix du joueur
+		switch (GR6_choix_mode_jeu)
+		{
+		case 1:
+			GR6_numCouleurChoisie = GR6_humain(map, GR6_numeroJoueur);		//l'utilisateur joue un coup
+			GR6_choix_mode_jeu = GR6_old_choix_mode_jeu;
+			printf("GR6_choix_mode_jeu %i \n",GR6_choix_mode_jeu);
+			printf("GR6_old_choix_mode_jeu %i \n",GR6_old_choix_mode_jeu);
+			break;
+
+		case 2:
+			GR6_numCouleurChoisie = GR6_ia_aleatoire(map,GR6_numeroJoueur);		//l'ia aléatoire joue un coup
+			GR6_choix_mode_jeu = 3 - GR6_choix_mode_jeu;
+			break;
+
+		case 3:
+			GR6_numCouleurChoisie = GR6_ia_glouton(map,GR6_numeroJoueur);		//l'ia glouton joue un coup
+			GR6_choix_mode_jeu = 4 - GR6_choix_mode_jeu;
+			break;
 		
+		case 4:
+			GR6_numCouleurChoisie = GR6_ia_smart(map,GR6_numeroJoueur);		//l'ia smart joue un coup
+			GR6_choix_mode_jeu = 5 - GR6_choix_mode_jeu;
+			break;
+		}
+
 		//mise à jour de la map
 		while(GR6_maj_monde(map, GR6_numCouleurChoisie,GR6_numeroJoueur)== 1)
 		{
@@ -76,9 +117,7 @@ int GR6_maj_monde(Map* map,int GR6_choixJoueur, int GR6_numeroJoueur)
 	{
 		for(int x=0; x<map->size;x++)
 		{	
-			int GR6_couleurCase = GR6_get_map_value(map, x, y);
-			
-			if(GR6_couleurCase == GR6_choixJoueur)		//si la case actuelle est celle jouée par le joueur en question
+			if(GR6_get_map_value(map, x, y) == GR6_choixJoueur)		//si la case actuelle est celle jouée par le joueur en question
 			{
 				//vérification si elle est bien adjacente au territoire
 				if(GR6_get_map_value(map, x+1, y)== GR6_numeroJoueur || 

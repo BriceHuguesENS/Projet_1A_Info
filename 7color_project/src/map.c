@@ -11,7 +11,6 @@ int GR6_numCouleur=0;		//la couleur associée à un numéro
 void create_empty_map (Map* map, int size)
 {	
 	map->map = malloc(sizeof(Color) * (size * size));
-	//Color* GR6_Carte = malloc(sizeof(Color)*(size^2));
 	map->size=size;
 }
 void set_map_value (Map* map, int x, int y, Color value)
@@ -47,7 +46,7 @@ void fill_map(Map* map)
 
 int main(int argc, char** argv)
 {
-	GR6_initialiser_jeu(&map,atoi(argv[1]));     //initialiserle jeu
+	GR6_initialiser_jeu(&map, atoi(argv[1]));     //initialiser le jeu
 
 	GR6_lancer_jeu(&map);     //lancer le jeu et gérer la partie
 

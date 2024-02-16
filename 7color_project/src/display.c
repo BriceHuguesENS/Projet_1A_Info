@@ -7,7 +7,7 @@ void GR6_affchage_etat_actuel_partie(Map* map)
     printf("\033[47m  ");
     for(int y=0; y<(map->size);y++)
 	{
-        printf("   ");
+        printf("  ");
     }
     printf("  \n");
     for(int y=0; y<(map->size);y++)
@@ -15,72 +15,67 @@ void GR6_affchage_etat_actuel_partie(Map* map)
         printf("\033[47m  ");
 		for(int x=0; x<(map->size);x++)
 		{
-            
-            //printf(" %i ",map->map[(map->size)*y +x]);
-            //printf("get_map_value (map, x, y) : %i \n",get_map_value (map, x, y));
-            //printf("map -> map[y * map -> size + x] %i \n",map -> map[y * map -> size + x]);
-
             switch (get_map_value (map, x, y))
             {
             case 1:
                 // Réinitialiser la couleur
                 printf("\033[0m");
-                printf(" v ");
+                printf("🤖");
                 break;
             
             case 2:
                 // Réinitialiser la couleur
                 printf("\033[0m");
-                printf(" ^ ");
+                printf("🤑");
                 break;
 
             case 3:
                 printf("\033[0m");
-                printf(" \033[31mR ");
+                printf("🟥");
                 break;
 
             case 4:
                 printf("\033[0m");
-                printf(" \033[32mG ");
+                printf("🟩");
                 break;
             
             case 5:
                 printf("\033[0m");
-                printf(" \033[34mB ");
+                printf("🟦");
                 break;
 
             case 6:
                 printf("\033[0m");
-                printf(" \033[33mY ");
+                printf("🟨");
                 break;
 
             case 7:
                 printf("\033[0m");
-                printf(" \033[35mM ");
+                printf("🟪");
                 break;
             
             case 8:
                 printf("\033[0m");
-                printf(" \033[36mC ");
+                printf("🟫");
                 break;
 
             case 9:
                 printf("\033[0m");
-                printf(" \033[37mW ");
+                printf("⬜");
                 break;
             
             default:
                 break;
             }
         }
-        printf("\033[47m  \n");
+        printf("\033[47m  \033[0m\n");
 	}
     printf("\033[47m  ");
     for(int y=0; y<(map->size);y++)
 	{
-        printf("   ");
+        printf("  ");
     }
-    printf("  \n");
+    printf("  \033[0m\n");
     // Réinitialiser la couleur
-    printf("\033[0m");
+    printf("\033[0m\n");
 }
