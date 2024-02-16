@@ -85,14 +85,16 @@ int GR6_ia_smart(Map* map, int GR6_numeroJoueur)     //ia qui joue le coup qui l
 
     //initilisation du tableau des couleurs possibles
     int GR6_nbCouleurs = 0;
-    int* GR6_couleursPossibles = malloc(sizeof(int)*10);
-    memset(GR6_couleursPossibles, 0, 10*sizeof(int));    //initialiser le tableau précédent avec que des 0
+    int* GR6_couleursPossibles = malloc(sizeof(int)*7);
+    memset(GR6_couleursPossibles, 0, 7*sizeof(int));    //initialiser le tableau précédent avec que des 0
     //printf("initialisation avec memset\n");
     /*
     for(int i = 0; i < 7; i++)
     {
         printf("%i\n",GR6_couleursPossibles[i]);
     }*/
+
+    //regarde si c'est une case adjacente
     for(int y=0; y<map->size;y++)
 	{
 		for(int x=0; x<map->size;x++)
@@ -129,8 +131,9 @@ int GR6_ia_smart(Map* map, int GR6_numeroJoueur)     //ia qui joue le coup qui l
     }
 
     //simulation d'un coup sur une map virtuelle
-    double GR6_maxCase = 0;		//pour compter le nombre maximal de cases en jouant le meilleur coup
-	double GR6_compteurCase = 0;
+    int GR6_maxCase = 0;		//pour compter le nombre maximal de cases en jouant le meilleur coup
+	int GR6_numeroMaxCase = 0;  //pour stocker le numero de la couleur qui permet de faire le meilleur coup
+    int GR6_compteurCase = 0;
 
     for(int i = 0; i < GR6_nbCouleurs; i++)
     {
@@ -139,7 +142,7 @@ int GR6_ia_smart(Map* map, int GR6_numeroJoueur)     //ia qui joue le coup qui l
         memcpy(GR6_map_virtuelle.map, map->map, map->size);    //copie de la map actuelle ddans la map virtuelle
 
         //mise à jour de la map
-		while(GR6_maj_monde(map, GR6_couleursPossiblesDefinitives[i],GR6_numeroJoueur)== 1)
+		while(GR6_maj_monde(&GR6_map_virtuelle, GR6_couleursPossiblesDefinitives[i],GR6_numeroJoueur)== 1)
 		{
             GR6_compteurCase++;
 			//on repasse dans la boucle while pour refaire la maj, et on en sort
@@ -148,11 +151,14 @@ int GR6_ia_smart(Map* map, int GR6_numeroJoueur)     //ia qui joue le coup qui l
         //GR6_maxCase = fmax(GR6_maxCase,GR6_compteurCase);    //on sauvegarde le meilleur coup
         if(GR6_compteurCase > GR6_maxCase)
         {
+            GR6_numeroMaxCase = GR6_couleursPossiblesDefinitives[i];
             GR6_maxCase = GR6_compteurCase;
+            printf("nouveaau max = %i \n", GR6_maxCase);
         }
     }
 
-    int GR6_couleurChoisie = GR6_couleursPossiblesDefinitives[rand()%GR6_nbCouleurs]; //retourne un numéro de couleur en prenant un indice aléatoire dans la liste des couleurs possibles
+    int GR6_couleurChoisie = GR6_numeroMaxCase; //retourne le numero de la couleur qui permet de faire le meilleur coup
+    
     //printf("RENVOIE : %i \n", GR6_couleurChoisie);
     free(GR6_couleursPossibles);
     free(GR6_couleursPossiblesDefinitives);

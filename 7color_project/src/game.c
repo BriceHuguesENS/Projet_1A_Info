@@ -50,8 +50,6 @@ void GR6_lancer_jeu(Map* map)     //fonction pour lancer le jeu et gérer la par
 		case 1:
 			GR6_numCouleurChoisie = GR6_humain(map, GR6_numeroJoueur);		//l'utilisateur joue un coup
 			GR6_choix_mode_jeu = GR6_old_choix_mode_jeu;
-			printf("GR6_choix_mode_jeu %i \n",GR6_choix_mode_jeu);
-			printf("GR6_old_choix_mode_jeu %i \n",GR6_old_choix_mode_jeu);
 			break;
 
 		case 2:
@@ -77,7 +75,7 @@ void GR6_lancer_jeu(Map* map)     //fonction pour lancer le jeu et gérer la par
 			//printf("Maj de la map en cours...");
 		}
 
-		system("clear");	//effacer le contenu du terminal
+		//system("clear");	//effacer le contenu du terminal
 		printf("Jeu les 7 merveilles du monde des 7 couleurs \n\n");
 		//Affichage de l'état actuel de la partie
 		GR6_affchage_etat_actuel_partie(map);
