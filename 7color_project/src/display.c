@@ -20,13 +20,13 @@ void GR6_affchage_etat_actuel_partie(Map* map)
             case 1:
                 // Réinitialiser la couleur
                 printf("\033[0m");
-                printf("🤖");
+                printf("🤑");
                 break;
-            
+
             case 2:
                 // Réinitialiser la couleur
                 printf("\033[0m");
-                printf("🤑");
+                printf("🤖");
                 break;
 
             case 3:

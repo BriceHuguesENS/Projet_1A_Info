@@ -18,8 +18,10 @@ void GR6_initialiser_jeu(Map* map,int GR6_taille_carte)     //fonction pour init
 
 int GR6_humain(Map* map, int GR6_numeroJoueur)
 {
+	system("clear");	//effacer le contenu du terminal
+	GR6_affchage_etat_actuel_partie(map);
 	//Affichage des choix de couleur disponible avec le chiffre correspondant
-	printf("\n\033[31m3:🟥\n\033[32m4:🟩\n\033[34m5:🟦\n\033[33m6:🟨\n\033[35m7:🟪\n\033[36m8:🟫\n\033[37m9:⬜️\n\033[0m");
+	printf("\033[38;2;255;0;0m3:🟥\n\033[38;2;0;255;0m4:🟩\n\033[34m5:🟦\n\033[33m6:🟨\n\033[35m7:🟪\n\033[38;2;139;69;19m8:🟫\n\033[38;2;255;255;255m9:⬜️\n\033[0m");
 	//sélection de la couleur par le joueur ou l'ia
 	printf("\n\033[0mJoueur %i, entrez votre couleur: ",GR6_numeroJoueur);
 	scanf("%i", &GR6_numCouleurChoisie);	//récupérer le choix du joueur
@@ -28,20 +30,32 @@ int GR6_humain(Map* map, int GR6_numeroJoueur)
 
 void GR6_lancer_jeu(Map* map)     //fonction pour lancer le jeu et gérer la partie en fonction du mode de jeu choisi
 {
+	system("clear");	//effacer le contenu du terminal
 	printf("Jeu les 7 merveilles du monde des 7 couleurs \n\n");
 	//Affichage de l'état actuel de la partie
 	GR6_affchage_etat_actuel_partie(map);
 	//Choix du mode de jeu
 	int GR6_choix_mode_jeu = -1;
-	printf("Veuillez sélectionner un mode de jeu: \n\n1:humain vs humain\n2:humain vs ia aléatoire\n3:humain vs ia glouton\n4:humain vs ia améliorée\n");
-	scanf("%i",&GR6_choix_mode_jeu);
-	system("clear");	//effacer le contenu du terminal
+	int GR6_typeJoueur1 = -1;
+	int GR6_typeJoueur2 = -1;
+	//sélectionner le type de joueur 1
+	printf("Veuillez sélectionner un type de joueur 1 🤑: \n\n1:humain \n2:ia aléatoire\n3:ia glouton\n4:ia smart\n5:500 parties entre ia glouton et ia aléatoire\n");
+	scanf("%i",&GR6_typeJoueur1);
 
-	int GR6_old_choix_mode_jeu = 0;
-	int* GR6_pointeur_old = &GR6_old_choix_mode_jeu;
-	*GR6_pointeur_old = GR6_choix_mode_jeu;
+	if(GR6_typeJoueur1 == 5)
+	{
+		GR6_500_partie_glouton_vs_aleatoire()
+	}
+
+	//sélectionner le type de joueur 2
+	printf("Veuillez sélectionner un type de joueur 2 🤖: \n\n1:humain \n2:ia aléatoire\n3:ia glouton\n4:ia smart\n");
+	scanf("%i",&GR6_typeJoueur2);
+
+	//Le joueur 1 commmence :
+	GR6_choix_mode_jeu = GR6_typeJoueur1;
+
 	printf("Début de la partie \n");
-	
+
 	
 	while(GR6_determiner_si_jeu_fini(map) == -1)		//tant que le jeu doit continuer
 	{
@@ -49,39 +63,47 @@ void GR6_lancer_jeu(Map* map)     //fonction pour lancer le jeu et gérer la par
 		{
 		case 1:
 			GR6_numCouleurChoisie = GR6_humain(map, GR6_numeroJoueur);		//l'utilisateur joue un coup
-			GR6_choix_mode_jeu = GR6_old_choix_mode_jeu;
 			break;
 
 		case 2:
 			GR6_numCouleurChoisie = GR6_ia_aleatoire(map,GR6_numeroJoueur);		//l'ia aléatoire joue un coup
-			GR6_choix_mode_jeu = 3 - GR6_choix_mode_jeu;
 			break;
 
 		case 3:
 			GR6_numCouleurChoisie = GR6_ia_glouton(map,GR6_numeroJoueur);		//l'ia glouton joue un coup
-			GR6_choix_mode_jeu = 4 - GR6_choix_mode_jeu;
 			break;
 		
 		case 4:
 			GR6_numCouleurChoisie = GR6_ia_smart(map,GR6_numeroJoueur);		//l'ia smart joue un coup
-			GR6_choix_mode_jeu = 5 - GR6_choix_mode_jeu;
 			break;
 		}
-
 		//mise à jour de la map
 		while(GR6_maj_monde(map, GR6_numCouleurChoisie,GR6_numeroJoueur)== 1)
 		{
 			//on repasse dans la boucle while pour refaire la maj, et on en sort
 			//printf("Maj de la map en cours...");
 		}
-
-		//system("clear");	//effacer le contenu du terminal
-		printf("Jeu les 7 merveilles du monde des 7 couleurs \n\n");
+		
+		system("clear");	//effacer le contenu du terminal
 		//Affichage de l'état actuel de la partie
 		GR6_affchage_etat_actuel_partie(map);
 
 		//Changement de joueur
-		GR6_numeroJoueur = 3 - GR6_numeroJoueur;	//passe ce numéro à 2 ou 1 en fonction de l'état au tour précédent
+		switch (GR6_numeroJoueur)
+		{
+		case 1:
+			GR6_numeroJoueur = 2;
+			GR6_choix_mode_jeu = GR6_typeJoueur2;
+			break;
+		
+		case 2:
+			GR6_numeroJoueur = 1;
+			GR6_choix_mode_jeu = GR6_typeJoueur1;
+			break;
+		
+		default:
+			break;
+		}
 	}	
 }
 
