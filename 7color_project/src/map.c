@@ -19,9 +19,9 @@ void set_map_value (Map* map, int x, int y, Color value)
 }
 
 Color get_map_value (Map* map, int x, int y){
-	if (map -> map == NULL || x >= map -> size || y >= map -> size || y < 0 || x < 0)
+	if (map -> map == NULL || x > map -> size || y > map -> size)
 	{
-		//printf("[ERROR] map not big enough or not initialized %p %i access (%i %i)", map -> map, map -> size, x, y);
+		printf("[ERROR] map not big enough or not initialized %p %i access (%i %i)", map -> map, map -> size, x, y);
 		return ERROR;
 	}
 	return map -> map[y * map -> size + x];
@@ -48,9 +48,9 @@ int main(int argc, char** argv)
 {
 	GR6_initialiser_jeu(&map, atoi(argv[1]));     //initialiser le jeu
 
-	GR6_lancer_jeu(&map);     //lancer le jeu et gérer la partie
+	GR6_lancer_jeu(&map);    //lancer le jeu et gérer la partie
 
-	GR6_cloturer_jeu(&map);     //cloturer le jeu
+	GR6_cloturer_jeu(&map);     //cloturer le jeu, libère l'espace mémoire et affiche les résultats
 }
 
 

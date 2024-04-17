@@ -19,13 +19,76 @@ void GR6_initialiser_jeu(Map* map,int GR6_taille_carte)     //fonction pour init
 int GR6_humain(Map* map, int GR6_numeroJoueur)
 {
 	system("clear");	//effacer le contenu du terminal
-	GR6_affchage_etat_actuel_partie(map);
-	//Affichage des choix de couleur disponible avec le chiffre correspondant
-	printf("\033[38;2;255;0;0m3:🟥\n\033[38;2;0;255;0m4:🟩\n\033[34m5:🟦\n\033[33m6:🟨\n\033[35m7:🟪\n\033[38;2;139;69;19m8:🟫\n\033[38;2;255;255;255m9:⬜️\n\033[0m");
-	//sélection de la couleur par le joueur ou l'ia
-	printf("\n\033[0mJoueur %i, entrez votre couleur: ",GR6_numeroJoueur);
-	scanf("%i", &GR6_numCouleurChoisie);	//récupérer le choix du joueur
-	return GR6_numCouleurChoisie;
+	GR6_affchage_etat_actuel_partie(map);	//affiche le contenu de la map
+	return GR6_affichage_choix_couleurs(GR6_numeroJoueur);	//affiche les choix de couleurs dispo et renvoie le choix du joueur
+}
+
+void GR6_500_partie_glouton_vs_aleatoire(Map* map)
+{
+	int GR6_score_glouton = 0;
+	int GR6_score_aleatoire = 0;
+	for(int i=0; i < 500; i++)
+	{
+		GR6_initialiser_jeu(map, 20);     //initialiser le jeu
+		int GR6_choix_mode_jeu = -1;
+		int GR6_typeJoueurAleatoire = 2;
+		int GR6_typeJoueurGlouton = 3;
+
+		//L'ia aléatoire (joueur 1) commmence :
+		GR6_choix_mode_jeu = GR6_typeJoueurAleatoire;
+
+		while(GR6_determiner_si_jeu_fini(map) == -1)		//tant que le jeu doit continuer
+		{
+		switch (GR6_choix_mode_jeu)
+			{
+			case 2:
+				GR6_numCouleurChoisie = GR6_ia_aleatoire(map,GR6_numeroJoueur);		//l'ia aléatoire joue un coup
+				break;
+
+			case 3:
+				GR6_numCouleurChoisie = GR6_ia_glouton(map,GR6_numeroJoueur);		//l'ia glouton joue un coup
+				break;
+			}
+		//mise à jour de la map
+		while(GR6_maj_monde(map, GR6_numCouleurChoisie,GR6_numeroJoueur)== 1)
+		{
+			//on repasse dans la boucle while pour refaire la maj, et on en sort
+			//printf("Maj de la map en cours...");
+		}
+		
+		//Changement de joueur
+		switch (GR6_numeroJoueur)
+		{
+		case 1:
+			GR6_numeroJoueur = 2;
+			GR6_choix_mode_jeu = GR6_typeJoueurGlouton;
+			break;
+		
+		case 2:
+			GR6_numeroJoueur = 1;
+			GR6_choix_mode_jeu = GR6_typeJoueurAleatoire;
+			break;
+		
+		default:
+			break;
+		}
+	}
+		switch (GR6_determiner_si_jeu_fini(map))
+		{
+			case 1:
+			GR6_score_aleatoire++;
+			break;
+
+			case 2:
+			GR6_score_glouton++;
+			break;
+		}	
+		//printf("coucou\n");
+	}
+
+	//affichage des résultats pour chaque ia
+	printf("Le score de l'ia glouton est : %i\n",GR6_score_glouton);
+	printf("Le score de l'ia aléatoire est : %i\n",GR6_score_aleatoire);
 }
 
 void GR6_lancer_jeu(Map* map)     //fonction pour lancer le jeu et gérer la partie en fonction du mode de jeu choisi
@@ -38,22 +101,26 @@ void GR6_lancer_jeu(Map* map)     //fonction pour lancer le jeu et gérer la par
 	int GR6_choix_mode_jeu = -1;
 	int GR6_typeJoueur1 = -1;
 	int GR6_typeJoueur2 = -1;
+
+	/*
 	//sélectionner le type de joueur 1
 	printf("Veuillez sélectionner un type de joueur 1 🤑: \n\n1:humain \n2:ia aléatoire\n3:ia glouton\n4:ia smart\n5:500 parties entre ia glouton et ia aléatoire\n");
 	scanf("%i",&GR6_typeJoueur1);
-
-	if(GR6_typeJoueur1 == 5)
+	*/
+	GR6_typeJoueur1 = GR6_affichage_type_joueur1();		//affiche les possibilités de jeu pour le joueur 2
+	printf("%i",GR6_typeJoueur1);
+	if(GR6_typeJoueur1 == 5)	//si l'on veut faire 500 parties entre ia glouton et ia aléatoire
 	{
-		GR6_500_partie_glouton_vs_aleatoire()
+		printf("couccc\n");
+		GR6_500_partie_glouton_vs_aleatoire(map);
 	}
-
-	//sélectionner le type de joueur 2
-	printf("Veuillez sélectionner un type de joueur 2 🤖: \n\n1:humain \n2:ia aléatoire\n3:ia glouton\n4:ia smart\n");
-	scanf("%i",&GR6_typeJoueur2);
+	else
+	{
+	GR6_typeJoueur2 = GR6_affichage_type_joueur2();		//affiche les possibilités de jeu pour le joueur 2
 
 	//Le joueur 1 commmence :
 	GR6_choix_mode_jeu = GR6_typeJoueur1;
-
+	}
 	printf("Début de la partie \n");
 
 	
@@ -62,7 +129,7 @@ void GR6_lancer_jeu(Map* map)     //fonction pour lancer le jeu et gérer la par
 		switch (GR6_choix_mode_jeu)
 		{
 		case 1:
-			GR6_numCouleurChoisie = GR6_humain(map, GR6_numeroJoueur);		//l'utilisateur joue un coup
+			GR6_numCouleurChoisie = GR6_humain(map, GR6_numeroJoueur);		//l'utilisateur humain joue un coup
 			break;
 
 		case 2:
@@ -104,30 +171,7 @@ void GR6_lancer_jeu(Map* map)     //fonction pour lancer le jeu et gérer la par
 		default:
 			break;
 		}
-	}	
-}
-
-void GR6_cloturer_jeu(Map* map)     //fonction pour cloturer le jeu
-{
-	//sélection de l'issue finale
-	switch (GR6_determiner_si_jeu_fini(map))
-	{
-	case 1:
-		printf("Fin de la partie !\nLe vainqueur est le joueur 1 \n");	
-		break;
-
-	case 2:
-		printf("Fin de la partie !\nLe vainqueur est le joueur 2 \n");	
-		break;
-	
-	case 0:
-		printf("Fin de la partie !\nIl y a égalité \n");	
-		break;
 	}
-	
-	//libération de l'espace mémoire
-	free(map->map);
-	map->map = NULL;
 }
 
 
@@ -201,3 +245,5 @@ Color GR6_get_map_value(Map* map, int x, int y)     //pour récupérer la valeur
 	//sinon
 	return get_map_value(map, x, y);
 }
+
+//lance 500 parties entre l'ia glouton et l'ia aléatoire

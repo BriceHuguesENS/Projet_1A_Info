@@ -15,4 +15,6 @@ void GR6_cloturer_jeu(Map* map);     //fonction pour cloturer le jeu
 Color GR6_get_map_value(Map* map, int x, int y);     //pour récupérer la valeur d'une cse du jeu, et -1 si on sort de la map (fait appel à get_map_value de map.c)
 
 int GR6_humain(Map* map, int GR6_numeroJoueur);     //demande à l'utilisateur de jouer son tour
+
+void GR6_500_partie_glouton_vs_aleatoire(Map* map); //lance 500 parties entre l'ia glouton et l'ia aléatoire
 #endif
