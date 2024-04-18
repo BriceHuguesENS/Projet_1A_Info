@@ -6,7 +6,7 @@
 // Implémentation de la fonction d'affichage
 void GR6_affchage_etat_actuel_partie(Map* map)
 {
-    printf("\033[47m  ");
+    printf("\033[47m  ");   //affichage le contour en gris
     for(int y=0; y<(map->size);y++)
 	{
         printf("  ");
@@ -14,7 +14,7 @@ void GR6_affchage_etat_actuel_partie(Map* map)
     printf("  \n");
     for(int y=0; y<(map->size);y++)
 	{
-        printf("\033[47m  ");
+        printf("\033[47m  ");       //affichage le contour en gris
 		for(int x=0; x<(map->size);x++)
 		{
             switch (get_map_value (map, x, y))
@@ -78,11 +78,11 @@ void GR6_affchage_etat_actuel_partie(Map* map)
         printf("  ");
     }
     printf("  \033[0m\n");
-    // Réinitialiser la couleur
+    // Réinitialiser la couleur du fond du terminal
     printf("\033[0m\n");
 }
 
-int GR6_affichage_choix_couleurs(int GR6_numeroJoueur)
+int GR6_affichage_choix_couleurs(int GR6_numeroJoueur)      //correspondance entre les couleurs et les chiffres
 {
     int GR6_numCouleur=0;
     printf("\033[38;2;255;0;0m3:🟥\n\033[38;2;0;255;0m4:🟩\n\033[34m5:🟦\n\033[33m6:🟨\n\033[35m7:🟪\n\033[38;2;139;69;19m8:🟫\n\033[38;2;255;255;255m9:⬜️\n\033[0m");

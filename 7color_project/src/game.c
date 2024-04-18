@@ -6,36 +6,36 @@
 #include "../head/ia.h"
 
 int GR6_numCouleurChoisie = 0;	//variable pour enregistrer le choix de couleur du joueur
-int GR6_numeroJoueur = 1;	//c'est le joueur 1 ('v') qui commence la partie
+int GR6_numeroJoueur = 1;	//c'est le joueur 1 🤑 qui commence la partie
 
-void GR6_initialiser_jeu(Map* map,int GR6_taille_carte)     //fonction pour initialiser la carte et d'autres paramètres au début du jeu
+void GR6_initialiser_jeu(Map* map,int GR6_taille_carte)     //initialiser la carte et d'autres paramètres au début du jeu
 {
     system("clear");	//effacer le contenu du terminal
-	srand( time( NULL ) );		//initialiser la fonction rand sur le timer
+	srand( time( NULL ) );		//initialiser la fonction rand() sur le timer
 	create_empty_map (map, GR6_taille_carte);	//création de la carte
-	fill_map(map);		//remplie les cases de la carte
+	fill_map(map);		//remplit les cases de la carte
 }
 
 int GR6_humain(Map* map, int GR6_numeroJoueur)
 {
 	system("clear");	//effacer le contenu du terminal
 	GR6_affchage_etat_actuel_partie(map);	//affiche le contenu de la map
-	return GR6_affichage_choix_couleurs(GR6_numeroJoueur);	//affiche les choix de couleurs dispo et renvoie le choix du joueur
+	return GR6_affichage_choix_couleurs(GR6_numeroJoueur);	//affiche les choix de couleurs disponibles et renvoie le choix du joueur
 }
 
 void GR6_500_partie_glouton_vs_aleatoire(Map* map)
 {
+	//initialisation des scores
 	int GR6_score_glouton = 0;
 	int GR6_score_aleatoire = 0;
 	for(int i=0; i < 500; i++)
 	{
-		GR6_initialiser_jeu(map, 20);     //initialiser le jeu
+		GR6_initialiser_jeu(map, 20);     //initialiser le jeu pour une map de taille 20x20
 		int GR6_choix_mode_jeu = -1;
 		int GR6_typeJoueurAleatoire = 2;
 		int GR6_typeJoueurGlouton = 3;
 
-		//L'ia aléatoire (joueur 1) commmence :
-		GR6_choix_mode_jeu = GR6_typeJoueurAleatoire;
+		GR6_choix_mode_jeu = GR6_typeJoueurAleatoire;		//L'ia aléatoire (joueur 1🤑) commmence la partie
 
 		while(GR6_determiner_si_jeu_fini(map) == -1)		//tant que le jeu doit continuer
 		{
@@ -73,7 +73,7 @@ void GR6_500_partie_glouton_vs_aleatoire(Map* map)
 			break;
 		}
 	}
-		switch (GR6_determiner_si_jeu_fini(map))
+		switch (GR6_determiner_si_jeu_fini(map))	//ajouter un point au vainqueur
 		{
 			case 1:
 			GR6_score_aleatoire++;
@@ -83,7 +83,6 @@ void GR6_500_partie_glouton_vs_aleatoire(Map* map)
 			GR6_score_glouton++;
 			break;
 		}	
-		//printf("coucou\n");
 	}
 
 	//affichage des résultats pour chaque ia
@@ -91,7 +90,7 @@ void GR6_500_partie_glouton_vs_aleatoire(Map* map)
 	printf("Le score de l'ia aléatoire est : %i\n",GR6_score_aleatoire);
 }
 
-void GR6_lancer_jeu(Map* map)     //fonction pour lancer le jeu et gérer la partie en fonction du mode de jeu choisi
+void GR6_lancer_jeu(Map* map)     //lancer le jeu et gérer la partie en fonction du mode de jeu choisi
 {
 	system("clear");	//effacer le contenu du terminal
 	printf("Jeu les 7 merveilles du monde des 7 couleurs \n\n");
@@ -102,16 +101,10 @@ void GR6_lancer_jeu(Map* map)     //fonction pour lancer le jeu et gérer la par
 	int GR6_typeJoueur1 = -1;
 	int GR6_typeJoueur2 = -1;
 
-	/*
-	//sélectionner le type de joueur 1
-	printf("Veuillez sélectionner un type de joueur 1 🤑: \n\n1:humain \n2:ia aléatoire\n3:ia glouton\n4:ia smart\n5:500 parties entre ia glouton et ia aléatoire\n");
-	scanf("%i",&GR6_typeJoueur1);
-	*/
-	GR6_typeJoueur1 = GR6_affichage_type_joueur1();		//affiche les possibilités de jeu pour le joueur 2
+	GR6_typeJoueur1 = GR6_affichage_type_joueur1();		//affiche les possibilités de jeu pour le joueur 1 et renvoie son choix
 	printf("%i",GR6_typeJoueur1);
 	if(GR6_typeJoueur1 == 5)	//si l'on veut faire 500 parties entre ia glouton et ia aléatoire
 	{
-		printf("couccc\n");
 		GR6_500_partie_glouton_vs_aleatoire(map);
 	}
 	else
@@ -152,6 +145,7 @@ void GR6_lancer_jeu(Map* map)     //fonction pour lancer le jeu et gérer la par
 		}
 		
 		system("clear");	//effacer le contenu du terminal
+
 		//Affichage de l'état actuel de la partie
 		GR6_affchage_etat_actuel_partie(map);
 
@@ -184,7 +178,7 @@ int GR6_maj_monde(Map* map,int GR6_choixJoueur, int GR6_numeroJoueur)
 			if(GR6_get_map_value(map, x, y) == GR6_choixJoueur)		//si la case actuelle est celle jouée par le joueur en question
 			{
 				//vérification si elle est bien adjacente au territoire
-				if(GR6_get_map_value(map, x+1, y)== GR6_numeroJoueur || 
+				if(GR6_get_map_value(map, x+1, y) == GR6_numeroJoueur || 
 				   GR6_get_map_value(map, x, y+1) == GR6_numeroJoueur ||
 				   GR6_get_map_value(map, x-1, y) == GR6_numeroJoueur ||
 				   GR6_get_map_value(map, x, y-1) == GR6_numeroJoueur)
@@ -235,7 +229,7 @@ int GR6_determiner_si_jeu_fini(Map* map)		//fonction pour savoir si le jeu est f
 	return -1;		//la partie continue sinon
 }
 
-Color GR6_get_map_value(Map* map, int x, int y)     //pour récupérer la valeur d'une cse du jeu, et -1 si on sort de la map (fait appel à get_map_value de map.c)
+Color GR6_get_map_value(Map* map, int x, int y)     //pour récupérer la valeur d'une case du jeu, et -1 si on sort de la map (fait appel à get_map_value de map.c)
 {
 	if (map -> map == NULL || x >= map -> size || y >= map -> size || y < 0 || x < 0)
 	{

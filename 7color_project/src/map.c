@@ -6,16 +6,16 @@
 
 Map map = {.map = NULL, .size = 0};
 
-int GR6_numCouleur=0;		//la couleur associée à un numéro
+int GR6_numCouleur=0;		//la couleur associée à un numéro qui est stocké dans cette variable
 
 void create_empty_map (Map* map, int size)
 {	
-	map->map = malloc(sizeof(Color) * (size * size));
+	map->map = malloc(sizeof(Color) * (size * size));	//allouant sur le tas l’espace nécessaire pour un terrain de jeu carré de côté size.
 	map->size=size;
 }
 void set_map_value (Map* map, int x, int y, Color value)
 {
-	map->map[(map->size)*y +x]=value;
+	map->map[(map->size)*y +x]=value;	//se positionner au bon endroit en fonction de la valeur de x et y
 }
 
 Color get_map_value (Map* map, int x, int y){
@@ -39,8 +39,8 @@ void fill_map(Map* map)
 	}
 
 	//positionner les joueurs
-	set_map_value (map, 0, map->size-1, 1);		//joueur 1
-	set_map_value (map, map->size-1, 0, 2);		//joueur 2
+	set_map_value (map, 0, map->size-1, 1);		//joueur 1 en bas à gauche
+	set_map_value (map, map->size-1, 0, 2);		//joueur 2 en haut à droite
 }
 
 
